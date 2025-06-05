@@ -1,0 +1,10 @@
+.af{
+    color: black;
+}
+.pf{
+    color: green;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
