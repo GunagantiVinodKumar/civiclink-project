@@ -1,5 +1,6 @@
 package com.civiclink.project.Config;
 
+import com.civiclink.project.Entity.Resident;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,10 @@ public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    public String generateToken(String aadharNumber) {
+    public String generateToken(Resident resident) {
         return Jwts.builder()
-                .setSubject(aadharNumber)
+                .setSubject(resident.getAadharNumber())
+                .claim("role",resident.getRole().name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -37,11 +39,15 @@ public class JwtUtil {
         }
     }
 
-    private Claims getClaims(String token) {
-        return Jwts.parserBuilder()
+    protected Claims getClaims(String token) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+
+        String aadharNumber = claims.getSubject();
+        String role = claims.get("role",String.class);
+        return claims;
     }
 }

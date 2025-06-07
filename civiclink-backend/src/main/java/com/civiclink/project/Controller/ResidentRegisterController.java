@@ -1,23 +1,23 @@
 package com.civiclink.project.Controller;
 
 import com.civiclink.project.DTO.ResidentDTO;
-import com.civiclink.project.Service.ResidentService;
+import com.civiclink.project.Service.ResidentRegisterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/residents")
-public class ResidentController {
+public class ResidentRegisterController {
 
-    private final ResidentService residentService;
+    private final ResidentRegisterService residentRegisterService;
 
-    public ResidentController(ResidentService residentService) {
-        this.residentService = residentService;
+    public ResidentRegisterController(ResidentRegisterService residentRegisterService) {
+        this.residentRegisterService = residentRegisterService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerResident(@RequestBody ResidentDTO residentDTO) {
-        residentService.registerResident(residentDTO);
+        residentRegisterService.registerResident(residentDTO);
         return ResponseEntity.ok("Resident registered successfully");
     }
 }

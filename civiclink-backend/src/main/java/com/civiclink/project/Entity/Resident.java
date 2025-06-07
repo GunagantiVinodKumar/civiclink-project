@@ -1,5 +1,5 @@
 package com.civiclink.project.Entity;
-
+import com.civiclink.project.Enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +14,9 @@ public class Resident {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private String fullName;
 

@@ -2,18 +2,19 @@ package com.civiclink.project.Service;
 
 import com.civiclink.project.DTO.ResidentDTO;
 import com.civiclink.project.Entity.Resident;
+import com.civiclink.project.Enum.Role;
 import com.civiclink.project.Exception.ResidentExistsByAadhaarAtRegistration;
 import com.civiclink.project.Repository.ResidentRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResidentService {
+public class ResidentRegisterService {
 
     private final ResidentRepository residentRepo;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public ResidentService(ResidentRepository residentRepo, BCryptPasswordEncoder passwordEncoder) {
+    public ResidentRegisterService(ResidentRepository residentRepo, BCryptPasswordEncoder passwordEncoder) {
         this.residentRepo = residentRepo;
         this.passwordEncoder = passwordEncoder;
     }
@@ -36,6 +37,7 @@ public class ResidentService {
                 .village(dto.getVillage())
                 .pincode(dto.getPincode())
                 .occupation(dto.getOccupation())
+                .role(Role.RESIDENT)
                 .build();
 
         return residentRepo.save(resident);

@@ -32,7 +32,7 @@ public class AuthService {
             throw new ResidentWithWrongPasswordAtLogin("Invalid credentials");
         }
 
-        String token = jwtUtil.generateToken(resident.getAadharNumber());
+        String token = jwtUtil.generateToken(resident);
 
         return new MessageResponseDTO(token);
     }

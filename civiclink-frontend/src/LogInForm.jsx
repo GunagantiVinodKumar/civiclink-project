@@ -30,16 +30,9 @@ function LogInForm() {
       });
 
       if (response.ok) {
-        login(); // update auth context
-        console.log("login Successfull");
-
-        setTimeout(()  => { 
-        setLoginSuccess(true); // show success
-        },50);
-
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 2050); // wait 2 seconds before redirect
+        //login();
+        const data = await response.json();
+            console.log(data.message);
       }
        else {
         const data = await response.json();

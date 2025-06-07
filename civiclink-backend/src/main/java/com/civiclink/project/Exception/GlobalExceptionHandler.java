@@ -27,6 +27,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @ExceptionHandler(ResidentNotFoundAtReportingIssue.class)
+    public ResponseEntity<MessageResponseDTO> handleResidentNotFoundAtReportingIssue(ResidentNotFoundAtReportingIssue ex){
+        MessageResponseDTO response = new MessageResponseDTO(ex.getMessage());
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MessageResponseDTO> handleGenericException(Exception ex){
        // ex.printStackTrace();
