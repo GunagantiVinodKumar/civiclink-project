@@ -4,7 +4,7 @@ import { useAuth } from './AuthContext.jsx';
 
 function LogInForm() {
   const [errorMessage, setErrorMessage] = useState("");
-  const [loginSuccess, setLoginSuccess] = useState(false); //  new state
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const [aadharNumber, setAadharNumber] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -86,14 +86,14 @@ function LogInForm() {
           </button>
         </form>
 
-        {/* Success Message */}
+
         {loginSuccess && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-sm">
             Login successful! Redirecting to dashboard...
           </div>
         )}
 
-        {/* Error Message */}
+
         {errorMessage && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
             {errorMessage}
