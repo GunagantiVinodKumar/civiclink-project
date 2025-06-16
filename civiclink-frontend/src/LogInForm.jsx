@@ -30,9 +30,11 @@ function LogInForm() {
       });
 
       if (response.ok) {
-        //login();
         const data = await response.json();
-            console.log(data.message);
+        login(data.token); // Save JWT
+        setLoginSuccess(true);
+        setTimeout(() => navigate("/dashboard"), 700);
+
       }
        else {
         const data = await response.json();
