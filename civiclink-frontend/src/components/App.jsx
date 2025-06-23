@@ -3,6 +3,12 @@ import LogInForm from './LogInForm';
 import RegisterForm from './RegisterForm';
 import CitizenDashboard from './CitizenDashboard';
 import { useAuth } from './AuthContext.jsx';
+import ReportIssue from '../pages/ReportIssue';
+import Events from '../pages/Events';
+import MyReports from '../pages/MyReports';
+import VillageInfo from '../pages/VillageInfo';
+import Announcements from '../pages/Announcements';
+import Feedback from '../pages/Feedback';
 
 function App() {
   const {isLoggedIn }= useAuth();
@@ -12,7 +18,12 @@ function App() {
       <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <LogInForm />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/dashboard" element={isLoggedIn ? <CitizenDashboard /> : <Navigate to="/" />} />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/report" element={isLoggedIn ? <ReportIssue /> : <Navigate to="/" />} />
+      <Route path="/events" element={isLoggedIn ? <Events /> : <Navigate to ="/" />} />
+      <Route path="/my-reports" element={isLoggedIn ? <MyReports/> : <Navigate to ="/" />} />
+      <Route path="/village-info" element={isLoggedIn ? <VillageInfo/> : <Navigate to="/" />} />
+      <Route path ="/announcements" element={isLoggedIn ? <Announcements/> : <Navigate to="/"/>} />
+      <Route path="/feedback" element={isLoggedIn ? <Feedback/> : <Navigate to="/"/>} />
     </Routes>
   );
 }
