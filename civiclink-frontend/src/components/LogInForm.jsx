@@ -34,7 +34,7 @@ function LogInForm() {
 
       if (response.ok) {
         const data = await response.json();
-        login(data.token); // Save JWT
+        login(data.token, data.role); // Save JWT
         setLoginSuccess(true);
         setTimeout(() => navigate("/dashboard"), 700);
 

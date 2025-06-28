@@ -9,6 +9,7 @@ import MyReports from '../pages/MyReports';
 import VillageInfo from '../pages/VillageInfo';
 import Announcements from '../pages/Announcements';
 import Feedback from '../pages/Feedback';
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
   const {isLoggedIn }= useAuth();
@@ -24,6 +25,7 @@ function App() {
       <Route path="/village-info" element={isLoggedIn ? <VillageInfo/> : <Navigate to="/" />} />
       <Route path ="/announcements" element={isLoggedIn ? <Announcements/> : <Navigate to="/"/>} />
       <Route path="/feedback" element={isLoggedIn ? <Feedback/> : <Navigate to="/"/>} />
+      <Route path="/admin" element={role === "ADMIN" ? <AdminPanel /> : <Navigate to="/" />} />
     </Routes>
   );
 }
