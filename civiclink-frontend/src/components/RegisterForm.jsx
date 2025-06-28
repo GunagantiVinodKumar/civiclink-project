@@ -50,7 +50,9 @@ export default function RegisterForm() {
       });
 
       if (response.ok) {
-        navigate("/");
+        navigate("/",{
+            state: {successMessage: "Registered successfully! Please login"}
+            });
       } else {
         const data = await response.json();
         setErrorMessage(data.message || "Registration failed!");

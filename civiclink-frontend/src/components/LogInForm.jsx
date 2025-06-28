@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from './AuthContext.jsx';
+import { useLocation } from "react-router-dom";
 
 function LogInForm() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -9,6 +10,8 @@ function LogInForm() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const location = useLocation();
+  const successMessage = location.state?.successMessage || "";
 
   const formatAadhar = (value) => {
     const digits = value.replace(/\D/g, "");
@@ -92,6 +95,12 @@ function LogInForm() {
         {loginSuccess && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-sm">
             Login successful! Redirecting to dashboard...
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-sm">
+            {successMessage}
           </div>
         )}
 
