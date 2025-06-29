@@ -1,0 +1,18 @@
+# Ignore IntelliJ config
+.idea/
+*.iml
+
+# Ignore backend build files
+target/
+*.class
+*.jar
+*.log
+
+# Ignore frontend build files
+node_modules/
+dist/
+build/
+
+# Ignore sensitive files
+application.properties
+.env
