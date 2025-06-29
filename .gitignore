@@ -2,11 +2,7 @@
 .idea/
 *.iml
 
-# Ignore backend build files
-target/
-*.class
-*.jar
-*.log
+
 
 # Ignore frontend build files
 node_modules/
