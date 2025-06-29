@@ -9,10 +9,10 @@ import MyReports from '../pages/MyReports';
 import VillageInfo from '../pages/VillageInfo';
 import Announcements from '../pages/Announcements';
 import Feedback from '../pages/Feedback';
-import AdminPanel from './pages/AdminPanel';
+import AdminPanel from '../pages/AdminPanel';
 
 function App() {
-  const {isLoggedIn }= useAuth();
+  const {isLoggedIn ,role}= useAuth();
 
   return (
     <Routes>

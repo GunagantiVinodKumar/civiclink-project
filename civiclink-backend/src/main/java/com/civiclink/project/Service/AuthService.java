@@ -2,6 +2,7 @@ package com.civiclink.project.Service;
 
 import com.civiclink.project.Config.JwtUtil;
 import com.civiclink.project.DTO.LoginRequestDTO;
+import com.civiclink.project.DTO.LoginResponseDTO;
 import com.civiclink.project.DTO.MessageResponseDTO;
 import com.civiclink.project.Entity.Resident;
 import com.civiclink.project.Exception.*;
@@ -23,7 +24,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public MessageResponseDTO login(LoginRequestDTO loginRequest) {
+    public LoginResponseDTO login(LoginRequestDTO loginRequest) {
         Resident resident = residentRepo
                 .findByAadharNumber(loginRequest.getAadharNumber())
                 .orElseThrow(() -> new ResidentNotFoundAtLogin("User not found"));
@@ -33,7 +34,7 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(resident);
-
-        return new MessageResponseDTO(token);
+        String role  = resident.getRole().toString();
+        return new LoginResponseDTO(token, role);
     }
 }
