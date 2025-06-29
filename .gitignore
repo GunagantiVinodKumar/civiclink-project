@@ -1,14 +1,1 @@
-# Ignore IntelliJ config
-.idea/
-*.iml
 
-
-
-# Ignore frontend build files
-node_modules/
-dist/
-build/
-
-# Ignore sensitive files
-application.properties
-.env
