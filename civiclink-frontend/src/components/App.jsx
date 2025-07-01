@@ -1,16 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import LogInForm from './LogInForm';
-import RegisterForm from './RegisterForm';
+import LogInForm from     './LogInForm';
+import RegisterForm from  './RegisterForm';
 import CitizenDashboard from './CitizenDashboard';
-import { useAuth } from './AuthContext.jsx';
-import ReportIssue from '../pages/ReportIssue';
-import Events from '../pages/Events';
-import MyReports from '../pages/MyReports';
-import VillageInfo from '../pages/VillageInfo';
+import { useAuth } from   './AuthContext.jsx';
+import ReportIssue from   '../pages/ReportIssue';
+import Events from        '../pages/Events';
+import MyReports from     '../pages/MyReports';
+import VillageInfo from   '../pages/VillageInfo';
 import Announcements from '../pages/Announcements';
-import Feedback from '../pages/Feedback';
-import AdminPanel from '../pages/AdminPanel';
-
+import Feedback from      '../pages/Feedback';
+import AdminPanel from    '../pages/AdminPanel';
+import MyReports from     '../pages/MyReports';
 function App() {
   const {isLoggedIn ,role}= useAuth();
 
@@ -26,6 +26,7 @@ function App() {
       <Route path ="/announcements" element={isLoggedIn ? <Announcements/> : <Navigate to="/"/>} />
       <Route path="/feedback" element={isLoggedIn ? <Feedback/> : <Navigate to="/"/>} />
       <Route path="/admin" element={role === "ADMIN" ? <AdminPanel /> : <Navigate to="/" />} />
+      <Route path="/resident-dashboard/report" element={isLoggedIn ? <MyReports /> : <Navigate to="/" />} />
     </Routes>
   );
 }
