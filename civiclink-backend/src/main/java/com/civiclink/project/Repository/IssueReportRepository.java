@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IssueReportRepository extends JpaRepository<IssueReport, Long> {
     List<IssueReport> findAllByOrderByReportedAtDesc();
+    List<IssueReport> findBySubmittedBy(String aadharNumber);
 }

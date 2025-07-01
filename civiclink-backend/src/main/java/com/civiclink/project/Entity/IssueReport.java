@@ -9,19 +9,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IssueReport {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String description;
-    private String location;
+    private String category; // e.g., Water, Road, Electricity
+    private String ward;
+    private String status = "PENDING";
 
-    private LocalDateTime reportedAt;
+    private String submittedBy; // Aadhar or name
 
-    @ManyToOne
-    @JoinColumn(name = "resident_id")
-    private Resident reportedBy;
+    private LocalDateTime submittedAt;
 }
+
 
