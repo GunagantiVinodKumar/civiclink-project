@@ -1,51 +1,31 @@
 package com.civiclink.project.Service;
 
-import com.civiclink.project.DTO.IssueRequestDTO;
+import com.civiclink.project.DTO.IssueReportDTO;
 import com.civiclink.project.Entity.IssueReport;
-import com.civiclink.project.Entity.Resident;
-import com.civiclink.project.Exception.ResidentNotFoundAtReportingIssue;
 import com.civiclink.project.Repository.IssueReportRepository;
-import com.civiclink.project.Repository.ResidentRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class IssueReportService {
 
-    private final IssueReportRepository issueReportRepository;
-    private final ResidentRepository residentRepository;
+    private final IssueReportRepository issueRepo;
 
-    public IssueReportService(IssueReportRepository issueReportRepository, ResidentRepository residentRepository){
-        this.issueReportRepository = issueReportRepository;
-        this.residentRepository = residentRepository;
+    public IssueReportService(IssueReportRepository issueRepo) {
+        this.issueRepo = issueRepo;
     }
 
-    public String deleteByProvidingId(Long id){
-        issueReportRepository.deleteById(id);
-        return "Success fully deleted";
-    }
-
-    public List<Resident> getAllResidents() {
-        return residentRepository.findAll();
-    }
-
-    public List<IssueReport> getAllIssues() {
-        return issueReportRepository.findAll();
-    }
-
-    public void reportIssue(IssueRequestDTO request){
-        Resident resident = residentRepository.findById(request.getResidentId()).orElseThrow(
-                () -> new ResidentNotFoundAtReportingIssue("Resident not found")
-        );
+    public String submitIssue(IssueReportDTO dto, String aadhar) {
         IssueReport issue = new IssueReport();
-        issue.setTitle(request.getTitle());
-        issue.setDescription(request.getDescription());
-        issue.setLocation(request.getLocation());
-        issue.setReportedAt(LocalDateTime.now());
-        issue.setReportedBy(resident);
+        issue.setTitle(dto.getTitle());
+        issue.setDescription(dto.getDescription());
+        issue.setCategory(dto.getCategory());
+        issue.setWard(dto.getWard());
+        issue.setSubmittedBy(aadhar);
+        issue.setSubmittedAt(LocalDateTime.now());
 
-        issueReportRepository.save(issue);
+        issueRepo.save(issue);
+        return "Issue submitted successfully.";
     }
 }
