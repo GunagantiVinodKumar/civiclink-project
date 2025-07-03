@@ -33,6 +33,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IssueNotFoundException.class)
+    public ResponseEntity<MessageResponseDTO> issueNotFoundException(IssueNotFoundException ex){
+        MessageResponseDTO response = new MessageResponseDTO(ex.getMessage());
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MessageResponseDTO> handleGenericException(Exception ex){
        // ex.printStackTrace();
