@@ -15,13 +15,15 @@ public class IssueReport {
 
     private String title;
     private String description;
-    private String category; // e.g., Water, Road, Electricity
+    private String category; // Water, Road, Electricity
     private String ward;
     private String status = "PENDING";
-
-    private String submittedBy; // Aadhar or name
-
+    private String submittedBy;
     private LocalDateTime submittedAt;
+
+    private String imagePath;
+    private String videoPath;
+    private String audioPath;
 }
 
 
