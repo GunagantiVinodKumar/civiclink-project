@@ -4,7 +4,7 @@ function Feedback() {
   const [feedback, setFeedback] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const token = localStorage.getItem("token");
   const getSentimentLabel = (score) => {
     if (score <= -0.6) return "Very Negative 😠";
     if (score < -0.1) return "Negative 🙁";
@@ -23,6 +23,7 @@ function Feedback() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({ feedback }),
       });
