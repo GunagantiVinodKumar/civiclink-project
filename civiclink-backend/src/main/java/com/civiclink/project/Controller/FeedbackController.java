@@ -1,6 +1,5 @@
 package com.civiclink.project.Controller;
 
-<<<<<<< HEAD
 import com.civiclink.project.Config.JwtUtil;
 import com.civiclink.project.Entity.Feedback;
 import com.civiclink.project.Repository.FeedbackRepository;
@@ -10,23 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import jakarta.servlet.http.HttpServletRequest;
-=======
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
->>>>>>> backend
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/feedback")
 public class FeedbackController {
 
-<<<<<<< HEAD
     @Autowired
     private FeedbackRepository feedbackRepository;
 
     @Autowired
-    private JwtUtil jwtUtil; //  Inject JwtUtil
+    private JwtUtil jwtUtil;
 
     @PostMapping("/analyze")
     public ResponseEntity<Map<String, Object>> analyzeAndSaveFeedback(
@@ -38,16 +31,14 @@ public class FeedbackController {
             return ResponseEntity.badRequest().body(Map.of("error", "Feedback is empty"));
         }
 
-        //  Extract JWT and get Aadhar
+        // Extract JWT and get Aadhar
         String token = extractTokenFromHeader(httpRequest);
         String submittedBy = "Anonymous";
         if (token != null && jwtUtil.validateToken(token)) {
             submittedBy = jwtUtil.extractAadhar(token);
         }
-        System.out.println("Token: " + token);
-        System.out.println("Extracted Aadhar: " + submittedBy);
 
-        //  Call Python ML API
+        // Call Python ML API
         RestTemplate restTemplate = new RestTemplate();
         String pythonUrl = "http://localhost:5001/sentiment";
 
@@ -59,7 +50,7 @@ public class FeedbackController {
         try {
             ResponseEntity<Map> response = restTemplate.postForEntity(pythonUrl, entity, Map.class);
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                // 💾 Save feedback
+                // Save feedback
                 Feedback fb = new Feedback();
                 fb.setSubmittedBy(submittedBy);
                 fb.setFeedbackText(feedbackText);
@@ -83,7 +74,6 @@ public class FeedbackController {
         }
     }
 
-    //  Extract Bearer token from Authorization header
     private String extractTokenFromHeader(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
@@ -91,44 +81,4 @@ public class FeedbackController {
         }
         return null;
     }
-=======
-    @PostMapping("/analyze")
-    public ResponseEntity<Map<String, Object>> analyzeFeedback(@RequestBody Map<String, String> request) {
-        String feedback = request.get("feedback");
-
-        if (feedback == null || feedback.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Feedback is empty"));
-        }
-
-        RestTemplate restTemplate = new RestTemplate();
-        String pythonApiUrl = "http://localhost:5001/sentiment";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        Map<String, String> payload = new HashMap<>();
-        payload.put("feedback", feedback);
-
-        HttpEntity<Map<String, String>> httpRequest = new HttpEntity<>(payload, headers);
-
-        try {
-            ResponseEntity<Map> pythonResponse =
-                    restTemplate.postForEntity(pythonApiUrl, httpRequest, Map.class);
-
-            if (pythonResponse.getStatusCode().is2xxSuccessful() && pythonResponse.getBody() != null) {
-                Map<String, Object> result = new HashMap<>();
-                result.put("sentiment", pythonResponse.getBody().get("sentiment"));
-                result.put("score", pythonResponse.getBody().get("score"));
-                return ResponseEntity.ok(result);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                        .body(Map.of("error", "Failed to get response from ML service"));
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Error contacting ML service: " + e.getMessage()));
-        }
-    }
->>>>>>> backend
 }
