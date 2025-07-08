@@ -26,4 +26,13 @@ public class IssueReportController {
         String message = issueReportService.submitIssue(dto, aadhar);
         return ResponseEntity.ok(message);
     }
+
+    @GetMapping("/by-aadhar/{aadhar}")
+    public ResponseEntity<?> getIssuesByAadhar(@PathVariable String aadhar) {
+        try {
+            return ResponseEntity.ok(issueReportService.getIssuesByAadhar(aadhar));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to fetch issues: " + e.getMessage());
+        }
+    }
 }

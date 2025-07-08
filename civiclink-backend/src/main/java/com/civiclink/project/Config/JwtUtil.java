@@ -20,6 +20,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(resident.getAadharNumber())
                 .claim("role",resident.getRole().name())
+                .claim("name", resident.getFullName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)

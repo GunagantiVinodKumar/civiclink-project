@@ -76,6 +76,10 @@ public class IssueReportService {
         return issueRepo.findAll();
     }
 
+    public List<IssueReport> getIssuesByAadhar(String aadhar) {
+        return issueRepo.findBySubmittedBy(aadhar);
+    }
+
     public List<Resident> getAllResidents() {
         return residentRepo.findAll();
     }
