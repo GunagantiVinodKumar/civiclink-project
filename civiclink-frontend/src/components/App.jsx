@@ -9,6 +9,7 @@ import VillageInfo from   '../pages/VillageInfo';
 import Announcements from '../pages/Announcements';
 import Feedback from      '../pages/Feedback';
 import AdminPanel from    '../pages/AdminPanel';
+import MyReports from      '../pages/MyReports';
 
 function App() {
   const {isLoggedIn ,role}= useAuth();
@@ -19,6 +20,7 @@ function App() {
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/dashboard" element={isLoggedIn ? <CitizenDashboard /> : <Navigate to="/" />} />
       <Route path="/report" element={isLoggedIn ? <ReportIssue /> : <Navigate to="/" />} />
+      <Route path="/my-reports" element={isLoggedIn ? <MyReports /> : <Navigate to="/"/>} />
       <Route path="/events" element={isLoggedIn ? <CivicEvents /> : <Navigate to ="/" />} />
       <Route path="/village-info" element={isLoggedIn ? <VillageInfo/> : <Navigate to="/" />} />
       <Route path ="/announcements" element={isLoggedIn ? <Announcements/> : <Navigate to="/"/>} />
