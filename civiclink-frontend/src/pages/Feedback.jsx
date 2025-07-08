@@ -1,17 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Feedback() {
   const [feedback, setFeedback] = useState("");
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
-  const getSentimentLabel = (score) => {
-    if (score <= -0.6) return "Very Negative 😠";
-    if (score < -0.1) return "Negative 🙁";
-    if (score <= 0.1) return "Neutral 😐";
-    if (score < 0.6) return "Positive 🙂";
-    return "Very Positive 😄";
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,11 +22,19 @@ function Feedback() {
         body: JSON.stringify({ feedback }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
       const data = await response.json();
-      setResult(data);
+      if (!data || data.score === undefined) {
+        throw new Error("Invalid response from backend");
+      }
+
+      navigate("/feedback/result", { state: { result: data } });
     } catch (err) {
       console.error("Error analyzing sentiment:", err);
-      setResult({ sentiment: "error", score: "N/A" });
+      alert("Failed to submit feedback. Please check backend and try again.");
     }
     setLoading(false);
   };
@@ -52,14 +54,6 @@ function Feedback() {
           {loading ? "Analyzing..." : "Submit Feedback"}
         </button>
       </form>
-
-      {result && (
-        <div style={styles.resultBox}>
-          <h4 style={styles.resultLabel}>Result:</h4>
-          <p><strong>Interpretation:</strong> {getSentimentLabel(result.score)}</p>
-          <p><strong>Raw Score:</strong> {result.score}</p>
-        </div>
-      )}
     </div>
   );
 }
@@ -99,18 +93,6 @@ const styles = {
     color: "#fff",
     cursor: "pointer",
     alignSelf: "flex-start",
-  },
-  resultBox: {
-    marginTop: "1.5rem",
-    padding: "1rem",
-    backgroundColor: "#e2f0d9",
-    borderRadius: "6px",
-    border: "1px solid #b2d8b2",
-  },
-  resultLabel: {
-    marginBottom: "0.5rem",
-    fontSize: "18px",
-    fontWeight: "bold",
   },
 };
 
