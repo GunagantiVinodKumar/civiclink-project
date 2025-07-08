@@ -10,6 +10,7 @@ import Announcements from '../pages/Announcements';
 import Feedback from      '../pages/Feedback';
 import AdminPanel from    '../pages/AdminPanel';
 import MyReports from      '../pages/MyReports';
+import FeedbackResult from '../pages/FeedbackResult';
 
 function App() {
   const {isLoggedIn ,role}= useAuth();
@@ -26,6 +27,7 @@ function App() {
       <Route path ="/announcements" element={isLoggedIn ? <Announcements/> : <Navigate to="/"/>} />
       <Route path="/feedback" element={isLoggedIn ? <Feedback/> : <Navigate to="/"/>} />
       <Route path="/admin" element={role === "ADMIN" ? <AdminPanel /> : <Navigate to="/" />} />
+      <Route path="/feedback/result" element={isLoggedIn ? <FeedbackResult /> : <Navigate to="/"/>} />
     </Routes>
   );
 }
