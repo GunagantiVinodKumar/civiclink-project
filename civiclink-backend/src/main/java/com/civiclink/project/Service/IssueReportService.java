@@ -30,29 +30,71 @@ public class IssueReportService {
 
     public String submitIssue(IssueReportDTO dto, String aadhar) {
         try {
-            // Save files and get filenames/paths
+            // Step 1: Call ML API for prediction
+            String predictedTitle = "";
+            String predictedCategory = "";
+
+            try {
+                String mlResponse = callMLPredictAPI(dto.getDescription());
+
+                // Parse JSON manually
+                String cleaned = mlResponse.replaceAll("[{}\"]", "");
+                for (String part : cleaned.split(",")) {
+                    String[] keyValue = part.split(":", 2);
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
+                        if (key.equals("title")) predictedTitle = value;
+                        else if (key.equals("category")) predictedCategory = value;
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("ML prediction failed, falling back to form values: " + e.getMessage());
+                predictedTitle = dto.getTitle(); // fallback
+                predictedCategory = dto.getCategory();
+            }
+
+            // Step 2: Save media files
             String imagePath = saveFile(dto.getImage());
             String videoPath = saveFile(dto.getVideo());
             String audioPath = saveFile(dto.getAudio());
 
+            // Step 3: Build and save entity
             IssueReport issue = new IssueReport();
-            issue.setTitle(dto.getTitle());
+            issue.setTitle(predictedTitle);
             issue.setDescription(dto.getDescription());
-            issue.setCategory(dto.getCategory());
+            issue.setCategory(predictedCategory);
             issue.setWard(dto.getWard());
             issue.setSubmittedBy(aadhar);
             issue.setSubmittedAt(LocalDateTime.now());
-            issue.setStatus("PENDING"); // Default status
+            issue.setStatus("PENDING");
             issue.setImagePath(imagePath);
             issue.setVideoPath(videoPath);
             issue.setAudioPath(audioPath);
 
             issueRepo.save(issue);
             return "Issue submitted successfully.";
+
         } catch (IOException e) {
             return "Failed to submit issue: " + e.getMessage();
         }
     }
+
+    private String callMLPredictAPI(String description) throws IOException, InterruptedException {
+        String json = "{\"description\": \"" + description.replace("\"", "\\\"") + "\"}";
+
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create("http://localhost:5001/predict"))
+                .header("Content-Type", "application/json")
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+        java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        return response.body();
+    }
+
 
     private String saveFile(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) return null;
