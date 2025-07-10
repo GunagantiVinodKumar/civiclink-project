@@ -8,9 +8,7 @@ function ReportIssue() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    title: "",
     description: "",
-    category: "",
     ward: "",
     image: null,
     video: null,
@@ -50,9 +48,7 @@ function ReportIssue() {
       const text = await response.text();
       setMessage(`✅ Thank you, ${name}, for reporting the issue!`);
       setFormData({
-        title: "",
         description: "",
-        category: "",
         ward: "",
         image: null,
         video: null,
@@ -79,30 +75,6 @@ function ReportIssue() {
           encType="multipart/form-data"
         >
           <div>
-            <label className="block font-medium mb-1 text-gray-700">Title</label>
-            <input
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="E.g. Pothole in Ward 5"
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1 text-gray-700">Category</label>
-            <input
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="E.g. Roads / Electricity / Water"
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-
-          <div>
             <label className="block font-medium mb-1 text-gray-700">Ward</label>
             <input
               name="ward"
@@ -120,7 +92,7 @@ function ReportIssue() {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Describe the issue in detail..."
+              placeholder="Briefly describe the issue..."
               required
               rows={4}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
