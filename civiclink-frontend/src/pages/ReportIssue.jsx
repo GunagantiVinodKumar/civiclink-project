@@ -15,56 +15,28 @@ function ReportIssue() {
     audio: null,
   });
 
-  const [predicted, setPredicted] = useState({
-    title: "",
-    category: "",
-  });
-
   const [message, setMessage] = useState("");
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
-    const updatedData = { ...formData, [name]: files ? files[0] : value };
-    setFormData(updatedData);
-
-    if (name === "description" && value.trim().length > 10) {
-      try {
-        const res = await fetch("http://localhost:5001/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description: value }),
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setPredicted({
-            title: data.title,
-            category: data.category,
-          });
-        }
-      } catch (err) {
-        console.error("Prediction failed:", err);
-      }
+    if (files) {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { sub: aadhar, name } = jwtDecode(token);
+
     const formDataToSend = new FormData();
-
-    // ✅ Add manually predicted fields + form fields
-    formDataToSend.append("title", predicted.title);
-    formDataToSend.append("category", predicted.category);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("ward", formData.ward);
-
-    ["image", "video", "audio"].forEach((media) => {
-      if (formData[media]) formDataToSend.append(media, formData[media]);
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value) formDataToSend.append(key, value);
     });
 
     try {
-      const res = await fetch("http://localhost:8080/api/issues", {
+      const response = await fetch("http://localhost:8080/api/issues", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,7 +45,7 @@ function ReportIssue() {
         body: formDataToSend,
       });
 
-      const text = await res.text();
+      const text = await response.text();
       setMessage(`✅ Thank you, ${name}, for reporting the issue!`);
       setFormData({
         description: "",
@@ -82,52 +54,98 @@ function ReportIssue() {
         video: null,
         audio: null,
       });
-      setPredicted({ title: "", category: "" });
 
-      setTimeout(() => navigate("/feedback"), 1000);
-    } catch (err) {
-      console.error("Error reporting issue:", err);
+      setTimeout(() => {
+        navigate("/feedback");
+      }, 1000);
+    } catch (error) {
+      console.error("Error reporting issue:", error);
       setMessage("❌ Failed to report issue.");
     }
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Report an Issue</h2>
-      <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Describe your issue..."
-          required
-          className="w-full border p-2 rounded"
-        />
-        <input
-          name="ward"
-          value={formData.ward}
-          onChange={handleChange}
-          placeholder="Ward Number"
-          required
-          className="w-full border p-2 rounded"
-        />
-        <div className="flex flex-col gap-2">
-          <label>Attach Image:
-            <input type="file" name="image" accept="image/*" onChange={handleChange} />
-          </label>
-          <label>Attach Video:
-            <input type="file" name="video" accept="video/*" onChange={handleChange} />
-          </label>
-          <label>Attach Audio:
-            <input type="file" name="audio" accept="audio/*" onChange={handleChange} />
-          </label>
-        </div>
-        <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded">
-          Submit
-        </button>
-      </form>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center px-4 py-8">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-2xl w-full">
+        <h1 className="text-3xl font-extrabold text-blue-700 mb-6 text-center">📢 Report an Issue</h1>
 
-      {message && <p className="mt-4 text-green-600 font-medium">{message}</p>}
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+          encType="multipart/form-data"
+        >
+          <div>
+            <label className="block font-medium mb-1 text-gray-700">Ward</label>
+            <input
+              name="ward"
+              value={formData.ward}
+              onChange={handleChange}
+              placeholder="Enter your ward number"
+              required
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium mb-1 text-gray-700">Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Briefly describe the issue..."
+              required
+              rows={4}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Attach Image</label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Attach Video</label>
+              <input
+                type="file"
+                name="video"
+                accept="video/*"
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Attach Audio</label>
+              <input
+                type="file"
+                name="audio"
+                accept="audio/*"
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full mt-4 bg-blue-600 text-white py-3 rounded-xl font-semibold text-lg shadow hover:bg-blue-700 transition"
+          >
+            🚀 Submit Issue
+          </button>
+        </form>
+
+        {message && (
+          <p className="mt-6 text-center text-lg font-medium text-green-600">
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
