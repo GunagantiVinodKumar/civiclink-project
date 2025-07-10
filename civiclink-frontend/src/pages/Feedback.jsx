@@ -40,60 +40,37 @@ function Feedback() {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Share Your Feedback</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <textarea
-          rows="4"
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-          placeholder="Type your feedback here..."
-          style={styles.textarea}
-        />
-        <button type="submit" disabled={loading} style={styles.button}>
-          {loading ? "Analyzing..." : "Submit Feedback"}
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 px-4 py-12">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-2xl w-full">
+        <h1 className="text-3xl md:text-4xl font-bold text-blue-700 mb-6 text-center">
+          ✨ Share Your Feedback
+        </h1>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <textarea
+            rows="6"
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="Type your feedback here..."
+            required
+            className="w-full p-4 text-lg border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white resize-none"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3 text-lg font-semibold rounded-xl text-white shadow transition ${
+              loading
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {loading ? "Analyzing..." : "Submit Feedback"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    backgroundColor: "#f4f6f8",
-    padding: "2rem",
-    minHeight: "100vh",
-    fontFamily: "Segoe UI, sans-serif",
-    color: "#222",
-  },
-  heading: {
-    fontSize: "24px",
-    marginBottom: "1rem",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  textarea: {
-    resize: "none",
-    padding: "1rem",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    fontSize: "16px",
-    marginBottom: "1rem",
-    backgroundColor: "#fff",
-    color: "#000",
-  },
-  button: {
-    padding: "0.75rem 1.5rem",
-    fontSize: "16px",
-    backgroundColor: "#007bff",
-    border: "none",
-    borderRadius: "6px",
-    color: "#fff",
-    cursor: "pointer",
-    alignSelf: "flex-start",
-  },
-};
 
 export default Feedback;
