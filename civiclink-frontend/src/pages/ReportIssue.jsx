@@ -59,7 +59,6 @@ function ReportIssue() {
         audio: null,
       });
 
-      // ✅ Navigate to feedback after 1 second
       setTimeout(() => {
         navigate("/feedback");
       }, 1000);
@@ -70,21 +69,111 @@ function ReportIssue() {
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Report an Issue</h2>
-      <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
-        <input name="title" value={formData.title} onChange={handleChange} placeholder="Title" required className="w-full border p-2 rounded" />
-        <input name="category" value={formData.category} onChange={handleChange} placeholder="Category" required className="w-full border p-2 rounded" />
-        <input name="ward" value={formData.ward} onChange={handleChange} placeholder="Ward" required className="w-full border p-2 rounded" />
-        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" required className="w-full border p-2 rounded" />
-        <div className="flex flex-col gap-2">
-          <label>Attach Image: <input type="file" name="image" accept="image/*" onChange={handleChange} /></label>
-          <label>Attach Video: <input type="file" name="video" accept="video/*" onChange={handleChange} /></label>
-          <label>Attach Audio: <input type="file" name="audio" accept="audio/*" onChange={handleChange} /></label>
-        </div>
-        <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded">Submit</button>
-      </form>
-      {message && <p className="mt-4 text-green-600 font-medium">{message}</p>}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center px-4 py-8">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-2xl w-full">
+        <h1 className="text-3xl font-extrabold text-blue-700 mb-6 text-center">📢 Report an Issue</h1>
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+          encType="multipart/form-data"
+        >
+          <div>
+            <label className="block font-medium mb-1 text-gray-700">Title</label>
+            <input
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="E.g. Pothole in Ward 5"
+              required
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium mb-1 text-gray-700">Category</label>
+            <input
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              placeholder="E.g. Roads / Electricity / Water"
+              required
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium mb-1 text-gray-700">Ward</label>
+            <input
+              name="ward"
+              value={formData.ward}
+              onChange={handleChange}
+              placeholder="Enter your ward number"
+              required
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium mb-1 text-gray-700">Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Describe the issue in detail..."
+              required
+              rows={4}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Attach Image</label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Attach Video</label>
+              <input
+                type="file"
+                name="video"
+                accept="video/*"
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Attach Audio</label>
+              <input
+                type="file"
+                name="audio"
+                accept="audio/*"
+                onChange={handleChange}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full mt-4 bg-blue-600 text-white py-3 rounded-xl font-semibold text-lg shadow hover:bg-blue-700 transition"
+          >
+            🚀 Submit Issue
+          </button>
+        </form>
+
+        {message && (
+          <p className="mt-6 text-center text-lg font-medium text-green-600">
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
