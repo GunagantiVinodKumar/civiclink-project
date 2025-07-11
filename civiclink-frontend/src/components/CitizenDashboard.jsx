@@ -6,10 +6,10 @@ export default function CitizenDashboard() {
     const { logout } = useAuth();
   const navigate = useNavigate();
   
-  const handleLogout = () => {
-    logout();
-    navigate('/'); 
-  };
+ const handleLogout = () => {
+   logout();
+   navigate("/", { replace: true }); // Clear back stack after logout
+ };
 
   const actions = [
     {

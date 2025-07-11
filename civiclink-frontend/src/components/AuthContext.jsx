@@ -27,7 +27,9 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setToken(null);
+    setRole(null); // reset role state
     setIsLoggedIn(false);
   };
 

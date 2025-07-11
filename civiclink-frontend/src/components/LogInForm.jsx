@@ -32,17 +32,20 @@ function LogInForm() {
         body: JSON.stringify({ aadharNumber, password }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        login(data.token, data.role); // Save JWT
-        setLoginSuccess(true);
-        setTimeout(() => navigate("/dashboard"), 700);
+    if (response.ok) {
+      const data = await response.json();
+      login(data.token, data.role); // Save token and role in context/localStorage
 
+      setLoginSuccess(true);
+
+      // 👇 Role-based navigation
+      if (data.role === "ADMIN") {
+        setTimeout(() => navigate("/admin/dashboard",{replace:true}), 200);
+      } else {
+        setTimeout(() => navigate("/resident/dashboard",{replace:true}), 200);
       }
-       else {
-        const data = await response.json();
-        setErrorMessage(data.message || "Login failed. Please try again.");
-      }
+    }
+
     } catch (error) {
       console.error("Error during login:", error);
       setErrorMessage("Something went wrong or Turn on the Backend");

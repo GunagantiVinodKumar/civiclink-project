@@ -17,16 +17,16 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <LogInForm />} />
+      <Route path="/" element={isLoggedIn ? (role == "ADMIN" ? <Navigate to="/admin/dashboard" /> : <Navigate to="/resident/dashboard" />) : <LogInForm />} />
       <Route path="/register" element={<RegisterForm />} />
-      <Route path="/dashboard" element={isLoggedIn ? <CitizenDashboard /> : <Navigate to="/" />} />
+      <Route path="/resident/dashboard" element={isLoggedIn && role == "RESIDENT" ? <CitizenDashboard /> : <Navigate to="/" />} />
       <Route path="/report" element={isLoggedIn ? <ReportIssue /> : <Navigate to="/" />} />
       <Route path="/my-reports" element={isLoggedIn ? <MyReports /> : <Navigate to="/"/>} />
       <Route path="/events" element={isLoggedIn ? <CivicEvents /> : <Navigate to ="/" />} />
       <Route path="/village-info" element={isLoggedIn ? <VillageInfo/> : <Navigate to="/" />} />
       <Route path ="/announcements" element={isLoggedIn ? <Announcements/> : <Navigate to="/"/>} />
       <Route path="/feedback" element={isLoggedIn ? <Feedback/> : <Navigate to="/"/>} />
-      <Route path="/admin" element={role === "ADMIN" ? <AdminPanel /> : <Navigate to="/" />} />
+      <Route path="/admin/dashboard" element={isLoggedIn && role === "ADMIN" ? <AdminPanel /> : <Navigate to="/" />} />
       <Route path="/feedback/result" element={isLoggedIn ? <FeedbackResult /> : <Navigate to="/"/>} />
     </Routes>
   );
