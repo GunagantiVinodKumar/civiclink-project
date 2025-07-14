@@ -46,9 +46,6 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        String aadharNumber = claims.getSubject();
-        String role = claims.get("role",String.class);
         return claims;
     }
 }
