@@ -38,7 +38,7 @@ function LogInForm() {
 
       setLoginSuccess(true);
 
-      // 👇 Role-based navigation
+      // Role-based navigation
       if (data.role === "ADMIN") {
         setTimeout(() => navigate("/admin/dashboard",{replace:true}), 200);
       } else {
