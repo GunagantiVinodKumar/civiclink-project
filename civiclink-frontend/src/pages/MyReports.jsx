@@ -8,7 +8,7 @@ const MyReports = () => {
 
   useEffect(() => {
     const aadhar = jwtDecode(token).sub;
-    console.log("MyReports - Aadhar used:", aadhar); // ✅ Move inside useEffect
+    console.log("MyReports - Aadhar used:", aadhar); //Move inside useEffect
 
     fetch(`http://localhost:8080/api/issues/by-aadhar/${aadhar}`, {
       headers: {

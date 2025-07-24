@@ -12,14 +12,13 @@ import java.util.Date;
 public class JwtUtil {
 
     private final String SECRET = "MySecretKeyForJWTGeneration1234567890"; // should be at least 256 bits
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
-
+    private final long EXPIRATION_TIME = 1000 * 60 * 10;
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(Resident resident) {
         return Jwts.builder()
                 .setSubject(resident.getAadharNumber())
-                .claim("role",resident.getRole().name())
+                .claim("role","ROLE_"+resident.getRole().name())
                 .claim("name", resident.getFullName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -33,8 +32,8 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            getClaims(token);
-            return true;
+            Claims claims = getClaims(token);
+            return !claims.getExpiration().before(new Date());// check if expired
         } catch (JwtException e) {
             return false;
         }

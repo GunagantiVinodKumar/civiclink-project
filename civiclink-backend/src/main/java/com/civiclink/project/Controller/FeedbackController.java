@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/api/resident/feedback")
 public class FeedbackController {
 
     @Autowired

@@ -36,11 +36,10 @@ function ReportIssue() {
     });
 
     try {
-      const response = await fetch("http://localhost:8080/api/issues", {
+      const response = await fetch("http://localhost:8080/api/resident/issues", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          aadhar: aadhar,
         },
         body: formDataToSend,
       });

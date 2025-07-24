@@ -30,19 +30,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
 
-            if (jwtUtil.validateToken(token)) {
-                Claims claims = jwtUtil.getClaims(token);
+            try{
+                if (jwtUtil.validateToken(token)) {
+                    Claims claims = jwtUtil.getClaims(token);
 
-                String aadharNumber = claims.getSubject();
-                String role = claims.get("role", String.class);
+                    String aadharNumber = claims.getSubject();
+                    String role = claims.get("role", String.class);
 
-                List<SimpleGrantedAuthority> authorities =
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                    List<SimpleGrantedAuthority> authorities =
+                            List.of(new SimpleGrantedAuthority(role));
+                    System.out.println("Authorities: " + authorities);
 
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(aadharNumber, null, authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(aadharNumber, null, authorities);
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            }catch(Exception e) {
+                // Token is invalid or expired
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                response.getWriter().write("Invalid or expired token");
+                return; // Stop filter chain
             }
         }
 

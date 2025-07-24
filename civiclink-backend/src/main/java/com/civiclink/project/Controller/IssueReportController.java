@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/issues")
+@RequestMapping("/api/resident/issues")
 public class IssueReportController {
 
     private final IssueReportService issueReportService;
